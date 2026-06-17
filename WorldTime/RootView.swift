@@ -1,21 +1,15 @@
+//
+//  RootView.swift
+//  WorldTime
+//
+//  Created by Victor Kiver on 17.06.2026.
+//
+
 import SwiftUI
 
-enum Tab: Int, CaseIterable {
-    case search
-    case clock
-    case settings
-
-    var icon: Image {
-        switch self {
-        case .search: Image(.icSearch)
-        case .clock: Image(.icClock)
-        case .settings: Image(.icWorld)
-        }
-    }
-}
-
 struct RootView: View {
-    @State private var selectedTab: Tab = .clock
+
+    @State private var selectedTab: Tab = .dashboard
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -33,12 +27,30 @@ struct RootView: View {
     }
 }
 
+private enum Tab: Int, CaseIterable {
+    case dashboard
+    case clock
+    case map
+}
+
+extension Tab {
+
+    var icon: Image {
+        switch self {
+        case .dashboard: Image(.icSearch)
+        case .clock: Image(.icClock)
+        case .map: Image(.icWorld)
+        }
+    }
+}
+
 private struct TabButton: View {
+
+    @State private var bounceValue: Int = 0
+
     let tab: Tab
     let isActive: Bool
     let action: () -> Void
-
-    @State private var bounceValue: Int = 0
 
     var body: some View {
         Button {
@@ -65,32 +77,22 @@ private struct TabButton: View {
 }
 
 private struct TabContentView: View {
+
     var selectedTab: Tab
 
     var body: some View {
         Group {
             switch selectedTab {
-            case .search:
-                SearchTabView()
+            case .dashboard:
+                DashboardView()
             case .clock:
-                ContentView()
-            case .settings:
-                SettingsTabView()
+                ClockView()
+            case .map:
+                MapView()
             }
         }
-        .transition(.asymmetric(
-            insertion: .scale(scale: 0.94).combined(with: .opacity),
-            removal: .scale(scale: 1.04).combined(with: .opacity)
-        ))
         .id(selectedTab)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
-
-struct SettingsTabView: View {
-    var body: some View {
-        Color(.systemBackground)
-            .ignoresSafeArea()
     }
 }
 

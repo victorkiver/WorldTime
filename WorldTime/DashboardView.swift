@@ -1,12 +1,20 @@
+//
+//  WorldTimeApp.swift
+//  DashboardView
+//
+//  Created by Victor Kiver on 17.06.2026.
+//
+
 import SwiftUI
 
-struct SearchTabView: View {
+struct DashboardView: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var viewModels: [RowViewModel] = WorldTimeModel
         .sample.map { RowViewModel($0) }
 
+    @State private var visibleRows: Set<Int> = []
     @State private var shadowOpacity: CGFloat = 0
 
     var body: some View {
@@ -53,12 +61,15 @@ struct SearchTabView: View {
                     VStack(spacing: 12) {
                         ForEach(Array(viewModels.enumerated()), id: \.element.id) { index, viewModel in
                             RowView(viewModel: viewModel)
+                                .opacity(visibleRows.contains(index) ? 1 : 0)
+                                .offset(y: visibleRows.contains(index) ? 0 : 40)
                         }
                     }
                     .padding(.horizontal, 16)
                 }
                 .padding(.bottom, 100)
             }
+            .scrollIndicators(.never)
             .onScrollGeometryChange(for: CGFloat.self, of: { geometry in
                 geometry.contentOffset.y + geometry.contentInsets.top
             }, action: { _, newValue in
@@ -67,6 +78,16 @@ struct SearchTabView: View {
             })
         }
         .background(Color(.background))
+        .onAppear {
+            for index in viewModels.indices {
+                _ = withAnimation(
+                    .spring(response: 0.5, dampingFraction: 0.65)
+                    .delay(Double(index) * 0.08)
+                ) {
+                    visibleRows.insert(index)
+                }
+            }
+        }
     }
 }
 
@@ -200,14 +221,29 @@ extension WorldTimeModel {
 
 private struct GalleryView: View {
 
+    private let images: [ImageResource] = [
+        .images0, .images1, .images2, .images3, .images4, .images5
+    ]
+
+    @State private var visibleItems: Set<Int> = []
+
     var body: some View {
         HStack(spacing: -12) {
-            GalleryRow(image: .images0)
-            GalleryRow(image: .images1)
-            GalleryRow(image: .images2)
-            GalleryRow(image: .images3)
-            GalleryRow(image: .images4)
-            GalleryRow(image: .images5)
+            ForEach(Array(images.enumerated()), id: \.offset) { index, image in
+                GalleryRow(image: image)
+                    .opacity(visibleItems.contains(index) ? 1 : 0)
+                    .offset(x: visibleItems.contains(index) ? 0 : -30)
+            }
+        }
+        .onAppear {
+            for index in images.indices {
+                _ = withAnimation(
+                    .spring(response: 0.45, dampingFraction: 0.7)
+                    .delay(Double(index) * 0.06)
+                ) {
+                    visibleItems.insert(index)
+                }
+            }
         }
     }
 }
@@ -233,5 +269,5 @@ private struct GalleryRow: View {
 }
 
 #Preview {
-    SearchTabView()
+    DashboardView()
 }
