@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DashboardView: View {
 
-    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("appTheme") private var appTheme: AppTheme = .light
 
     @State private var viewModels: [RowViewModel] = WorldTimeModel
         .sample.map { RowViewModel($0) }
@@ -30,7 +30,7 @@ struct DashboardView: View {
                 } label: {
                     ZStack {
                         RoundedRectangle(cornerRadius: 18)
-                            .fill(Color.bgBox.inverted(by: colorScheme))
+                            .fill(Color.bgBox.inverted(by: appTheme))
                             .shadow(
                                 color: .black.opacity(0.08),
                                 radius: 8, x: 0, y: 4
@@ -93,7 +93,7 @@ struct DashboardView: View {
 
 private struct RowView: View {
 
-    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("appTheme") private var appTheme: AppTheme = .light
 
     @State var viewModel: RowViewModel
 
@@ -102,10 +102,10 @@ private struct RowView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(viewModel.utc)
                     .font(.meduim12)
-                    .foregroundStyle(viewModel.isHighlighted ? Color.basic02.inverted(by: colorScheme) : Color.basic02)
+                    .foregroundStyle(viewModel.isHighlighted ? Color.basic02.inverted(by: appTheme) : Color.basic02)
                 Text(viewModel.city)
                     .font(.meduim16)
-                    .foregroundStyle(viewModel.isHighlighted ? Color.basic01.inverted(by: colorScheme) : Color.basic01)
+                    .foregroundStyle(viewModel.isHighlighted ? Color.basic01.inverted(by: appTheme) : Color.basic01)
             }
 
             Spacer()
@@ -113,7 +113,7 @@ private struct RowView: View {
             Text(viewModel.time)
                 .font(viewModel.isHighlighted ? .bold28 : .medium24)
                 .monospacedDigit()
-                .foregroundStyle(viewModel.isHighlighted ? Color.basic01.inverted(by: colorScheme) : Color.basic01)
+                .foregroundStyle(viewModel.isHighlighted ? Color.basic01.inverted(by: appTheme) : Color.basic01)
 
             viewModel.timeOfDay.icon
                 .resizable()
@@ -124,7 +124,7 @@ private struct RowView: View {
         .padding(.vertical, 14)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(viewModel.isHighlighted ? Color.bgBox : Color.bgBox.inverted(by: colorScheme))
+                .fill(viewModel.isHighlighted ? Color.bgBox : Color.bgBox.inverted(by: appTheme))
         )
         .shadow(
             color: .black.opacity(0.06),

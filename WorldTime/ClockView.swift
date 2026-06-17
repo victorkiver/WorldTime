@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ClockView: View {
 
-    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("appTheme") private var appTheme: AppTheme = .light
 
     @State private var viewModel = ClockViewModel(model: WorldTimeModel.sample[4])
 
@@ -26,10 +26,10 @@ struct ClockView: View {
                                 color: .black.opacity(0.08),
                                 radius: 8, x: 0, y: 4
                             )
-                        Image(.icSettings)
+                        Image(.icTheme)
                             .resizable()
                             .frame(width: 18, height: 18)
-                            .foregroundStyle(Color.basic01.inverted(by: colorScheme))
+                            .foregroundStyle(Color.basic01.inverted(by: appTheme))
                     }
                 }
                 .frame(width: 36, height: 36)
@@ -179,7 +179,7 @@ private struct TimeUnit: View {
 
 private struct TimeFormatToggle: View {
 
-    @Environment(\.colorScheme) private var colorScheme
+    @AppStorage("appTheme") private var appTheme: AppTheme = .light
 
     @State var format: TimeFormat
     @Namespace private var toggleNamespace
@@ -212,7 +212,7 @@ private struct TimeFormatToggle: View {
             .background {
                 if isSelected {
                     Capsule()
-                        .fill(Color(.basic01.inverted(by: colorScheme)))
+                        .fill(Color(.basic01.inverted(by: appTheme)))
                         .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
                         .matchedGeometryEffect(id: "pill", in: toggleNamespace)
                 }

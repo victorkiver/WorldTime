@@ -10,9 +10,12 @@ import SwiftUI
 @main
 struct WorldTimeApp: App {
 
+    @AppStorage("appTheme") private var theme: AppTheme = .light
+
     var body: some Scene {
         WindowGroup {
             RootView()
+                .preferredColorScheme(theme.colorScheme)
         }
     }
 }

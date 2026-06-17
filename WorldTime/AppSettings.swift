@@ -6,20 +6,34 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum TimeFormat: String, CaseIterable {
     case twelveHour
     case twentyFourHour
 }
 
-enum Theme: String, CaseIterable {
+enum AppTheme: String, CaseIterable {
     case light
     case dark
+}
+
+extension AppTheme: Identifiable {
+
+    var id: Self { self }
+
+    var colorScheme: ColorScheme {
+        switch self {
+        case .light: .light
+        case .dark: .dark
+        }
+    }
 }
 
 protocol DefaultsManagerProtocol {
     var userDefault: UserDefaults { get }
     var timeFormat: TimeFormat { get set }
+    var appTheme: AppTheme { get set }
 
     func setValue<T>(_ value: T?, for key: UserDefaultsKey)
     func value<T>(forKey: UserDefaultsKey) -> T?
@@ -47,8 +61,14 @@ final class DefaultsManager: DefaultsManagerProtocol, @unchecked Sendable {
         get { TimeFormat(rawValue: value(forKey: .timeFormat) ?? "") ?? .twentyFourHour }
         set { setValue(newValue.rawValue, for: .timeFormat) }
     }
+
+    var appTheme: AppTheme {
+        get { AppTheme(rawValue: value(forKey: .appTheme) ?? "") ?? .light }
+        set { setValue(newValue.rawValue, for: .appTheme) }
+    }
 }
 
 enum UserDefaultsKey: String {
     case timeFormat
+    case appTheme
 }

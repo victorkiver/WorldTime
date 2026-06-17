@@ -14,4 +14,8 @@ extension Color {
         let resolvedUIColor = UIColor(self).resolvedColor(with: traits)
         return Color(resolvedUIColor)
     }
+
+    func inverted(by appTheme: AppTheme) -> Color {
+        inverted(by: appTheme.colorScheme)
+    }
 }
