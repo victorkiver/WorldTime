@@ -1,34 +1,11 @@
 //
-//  AppSettings.swift
+//  DefaultsManager.swift
 //  WorldTime
 //
-//  Created by Victor Kiver on 17.06.2026.
+//  Created by Victor Kiver on 19.06.2026.
 //
 
 import Foundation
-import SwiftUI
-
-enum TimeFormat: String, CaseIterable {
-    case twelveHour
-    case twentyFourHour
-}
-
-enum AppTheme: String, CaseIterable {
-    case light
-    case dark
-}
-
-extension AppTheme: Identifiable {
-
-    var id: Self { self }
-
-    var colorScheme: ColorScheme {
-        switch self {
-        case .light: .light
-        case .dark: .dark
-        }
-    }
-}
 
 protocol DefaultsManagerProtocol {
     var userDefault: UserDefaults { get }
@@ -63,7 +40,7 @@ final class DefaultsManager: DefaultsManagerProtocol, @unchecked Sendable {
     }
 
     var appTheme: AppTheme {
-        get { AppTheme(rawValue: value(forKey: .appTheme) ?? "") ?? .light }
+        get { AppTheme(rawValue: value(forKey: .appTheme) ?? "") ?? .default }
         set { setValue(newValue.rawValue, for: .appTheme) }
     }
 }

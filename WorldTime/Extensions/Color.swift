@@ -16,6 +16,7 @@ extension Color {
     }
 
     func inverted(by appTheme: AppTheme) -> Color {
-        inverted(by: appTheme.colorScheme)
+        guard let colorScheme = appTheme.colorScheme else { return self }
+        return inverted(by: colorScheme)
     }
 }

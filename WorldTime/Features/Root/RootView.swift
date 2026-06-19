@@ -35,16 +35,18 @@ private enum Tab: Int, CaseIterable {
 
 extension Tab {
 
-    var icon: Image {
+    var icon: ImageResource {
         switch self {
-        case .dashboard: Image(.icSearch)
-        case .clock: Image(.icClock)
-        case .map: Image(.icWorld)
+        case .dashboard: .icSearch
+        case .clock: .icClock
+        case .map: .icWorld
         }
     }
 }
 
 private struct TabButton: View {
+
+    @AppStorage(.appTheme) private var appTheme: AppTheme = .default
 
     @State private var bounceValue: Int = 0
 
@@ -59,16 +61,16 @@ private struct TabButton: View {
                 action()
             }
         } label: {
-            tab.icon
+            Image(tab.icon)
                 .resizable()
                 .font(.system(size: 18, weight: .semibold))
                 .symbolEffect(.bounce, value: bounceValue)
-                .foregroundStyle(isActive ? .white : .black)
+                .foregroundStyle(isActive ? Color.basic01.inverted(by: appTheme) : .basic01)
                 .frame(width: 22, height: 22)
                 .padding(14)
                 .background(
                     Circle()
-                        .fill(isActive ? Color.black : Color.gray.opacity(0.2))
+                        .fill(isActive ? .basic01 : Color.bgBox.inverted(by: appTheme))
                 )
                 .scaleEffect(isActive ? 1.1 : 1.0)
         }
