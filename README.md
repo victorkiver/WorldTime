@@ -10,4 +10,4 @@ A beautifully crafted iOS app for tracking time across the globe. Built entirely
 
 • Map — World map visualization with a horizontal card carousel of timezone-mapped cities.
 
-<img src="https://github.com/victorkiver/WorldTime/blob/main/WorldTime/Example.gif?raw=true" width="402" height="874" />
+<img src="https://github.com/victorkiver/WorldTime/blob/main/WorldTime/Example.gif?raw=true" />
