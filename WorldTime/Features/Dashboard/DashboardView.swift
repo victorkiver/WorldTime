@@ -12,10 +12,12 @@ struct DashboardView: View {
     @AppStorage(.appTheme) private var appTheme: AppTheme = .default
 
     @State private var visibleRows: Set<Int> = []
-
     @State private var shadowOpacity: CGFloat = 0
-
     @State private var viewModel = DashboardViewModel()
+
+    let onOpenGallery: ([ImageResource], CGPoint) -> Void
+
+    private let galleryImages: [ImageResource] = [.images0, .images1, .images2, .images3, .images4]
 
     var body: some View {
         VStack {
@@ -59,8 +61,11 @@ struct DashboardView: View {
 
     private var headerView: some View {
         HStack(alignment: .center) {
-            DashboardGalleryView(images: [.images0, .images1, .images2, .images3, .images4])
+            DashboardGalleryView(images: galleryImages)
                 .padding(.leading, 16)
+                .onTapGesture(coordinateSpace: .global) { location in
+                    onOpenGallery(galleryImages, location)
+                }
 
             Spacer()
 
@@ -106,5 +111,5 @@ struct DashboardView: View {
 }
 
 #Preview {
-    DashboardView()
+    DashboardView(onOpenGallery: { _, _ in })
 }

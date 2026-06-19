@@ -10,10 +10,17 @@ import SwiftUI
 struct RootView: View {
 
     @State private var selectedTab: Tab = .dashboard
+    @State private var showGallery = false
+    @State private var galleryTapOrigin: CGPoint = .zero
+    @State private var galleryImages: [ImageResource] = []
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            TabContentView(selectedTab: selectedTab)
+            TabContentView(selectedTab: selectedTab) { images, origin in
+                galleryImages = images
+                galleryTapOrigin = origin
+                showGallery = true
+            }
 
             HStack(spacing: 24) {
                 ForEach(Tab.allCases, id: \.self) { tab in
@@ -23,6 +30,15 @@ struct RootView: View {
                 }
             }
             .padding(.bottom, 16)
+        }
+        .overlay {
+            if showGallery {
+                FullScreenGalleryView(
+                    images: galleryImages,
+                    tapOrigin: galleryTapOrigin,
+                    onDismiss: { showGallery = false }
+                )
+            }
         }
     }
 }
@@ -81,12 +97,13 @@ private struct TabButton: View {
 private struct TabContentView: View {
 
     var selectedTab: Tab
+    var onOpenGallery: ([ImageResource], CGPoint) -> Void
 
     var body: some View {
         Group {
             switch selectedTab {
             case .dashboard:
-                DashboardView()
+                DashboardView(onOpenGallery: onOpenGallery)
             case .clock:
                 ClockView()
             case .map:
